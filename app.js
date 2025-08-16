@@ -204,26 +204,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Resume Download Functionality
-    const resumeButtons = document.querySelectorAll('#download-resume, #main-resume-btn');
     
-    resumeButtons.forEach(btn => {
-        btn.addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // In a real application, this would link to an actual resume file
-            // For demo purposes, we'll show a notification
-            showNotification('Resume download functionality would be implemented with an actual PDF file link.', 'info');
-            
-            // Example of how to implement actual download:
-            // const link = document.createElement('a');
-            // link.href = 'path/to/resume.pdf';
-            // link.download = 'Nimish_Parmar_Resume.pdf';
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
-        });
-    });
 
     // Scroll animations
     const observerOptions = {

@@ -1336,6 +1336,48 @@ section {
     transition: transform 0.3s ease;
 }
 
+
+
+.certification-card {
+    position: relative;
+    overflow: hidden;
+    padding: 2rem 1rem;
+    min-height: 200px; /* Adjust as needed for your content */
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.cert-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(42, 183, 202, 0.85);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 1.3rem;
+    font-weight: 600;
+    z-index: 2;
+    pointer-events: none;
+}
+
+.cert-link:hover .cert-overlay,
+.certification-card:hover .cert-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+
+
+
+
 .certification-card:hover {
     transform: translateY(-5px);
 }
