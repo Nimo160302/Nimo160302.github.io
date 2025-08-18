@@ -46,8 +46,91 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById(target).classList.add('active');
         });
     });
+    
 
-    // Contact Form Handling
+    // Scroll animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    // Add animation classes and observe elements
+    const animatedElements = document.querySelectorAll('.skill-item, .project-card, .timeline-item, .certification-card, .event-item');
+    
+    animatedElements.forEach((el, index) => {
+        el.classList.add('fade-in');
+        el.style.transitionDelay = `${index * 0.1}s`;
+        observer.observe(el);
+    });
+
+    // Skill bar animations
+    const skillBars = document.querySelectorAll('.skill-progress');
+    const skillObserver = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const progressBar = entry.target;
+                const width = progressBar.getAttribute('data-width');
+                progressBar.style.width = width + '%';
+            }
+        });
+    }, observerOptions);
+
+    skillBars.forEach(bar => {
+        skillObserver.observe(bar);
+    });
+
+    // Header scroll effect
+    const header = document.querySelector('.header');
+    let lastScrollTop = 0;
+
+    window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollTop > 100) {
+            header.style.background = 'rgba(26, 43, 76, 0.95)';
+            header.style.backdropFilter = 'blur(10px)';
+        } else {
+            header.style.background = '#1a2b4c';
+            header.style.backdropFilter = 'none';
+        }
+        
+        lastScrollTop = scrollTop;
+    });
+
+    // Add active nav link highlighting
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', function() {
+        const scrollPos = window.scrollY + 100;
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.offsetHeight;
+            const sectionId = section.getAttribute('id');
+            
+            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${sectionId}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    });
+
+
+
+        // Contact Form Handling
     const contactForm = document.getElementById('contact-form');
     
     contactForm.addEventListener('submit', function(e) {
@@ -80,6 +163,31 @@ document.addEventListener('DOMContentLoaded', function() {
         const originalText = submitBtn.textContent;
         submitBtn.textContent = 'Sending...';
         submitBtn.disabled = true;
+
+
+        // Actual Web3Forms submission
+        fetch(contactForm.action, {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => {
+                    if (response.ok) {
+                        showNotification('Thank you! Your message has been sent.', 'success');
+                        contactForm.reset();
+                    } else {
+                        showNotification('There was an error sending your message. Please try again.', 'error');
+                    }
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                })
+                .catch(() => {
+                    showNotification('There was an error sending your message. Please try again.', 'error');
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+            });
+            
+
+
         
         setTimeout(() => {
             showNotification('Thank you for your message! I\'ll get back to you soon.', 'success');
@@ -88,6 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
             submitBtn.disabled = false;
         }, 1500);
     });
+
 
     // Email validation
     function isValidEmail(email) {
@@ -202,89 +311,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }, 300);
         }
-    }
-
-    
-
-    // Scroll animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
     };
-
-    const observer = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, observerOptions);
-
-    // Add animation classes and observe elements
-    const animatedElements = document.querySelectorAll('.skill-item, .project-card, .timeline-item, .certification-card, .event-item');
-    
-    animatedElements.forEach((el, index) => {
-        el.classList.add('fade-in');
-        el.style.transitionDelay = `${index * 0.1}s`;
-        observer.observe(el);
-    });
-
-    // Skill bar animations
-    const skillBars = document.querySelectorAll('.skill-progress');
-    const skillObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const progressBar = entry.target;
-                const width = progressBar.getAttribute('data-width');
-                progressBar.style.width = width + '%';
-            }
-        });
-    }, observerOptions);
-
-    skillBars.forEach(bar => {
-        skillObserver.observe(bar);
-    });
-
-    // Header scroll effect
-    const header = document.querySelector('.header');
-    let lastScrollTop = 0;
-
-    window.addEventListener('scroll', function() {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-        
-        if (scrollTop > 100) {
-            header.style.background = 'rgba(26, 43, 76, 0.95)';
-            header.style.backdropFilter = 'blur(10px)';
-        } else {
-            header.style.background = '#1a2b4c';
-            header.style.backdropFilter = 'none';
-        }
-        
-        lastScrollTop = scrollTop;
-    });
-
-    // Add active nav link highlighting
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav-link');
-
-    window.addEventListener('scroll', function() {
-        const scrollPos = window.scrollY + 100;
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.offsetHeight;
-            const sectionId = section.getAttribute('id');
-            
-            if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
-                navLinks.forEach(link => {
-                    link.classList.remove('active');
-                    if (link.getAttribute('href') === `#${sectionId}`) {
-                        link.classList.add('active');
-                    }
-                });
-            }
-        });
-    });
 
     // Add hover effects to project cards
     const projectCards = document.querySelectorAll('.project-card');
